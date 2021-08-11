@@ -53,7 +53,6 @@ const extractGithubInfo = async (item) => {
     }
     catch{
         repo.followingCount = 0;
-        continue;
     }
     let numberOfBranch;
     try{
@@ -69,7 +68,7 @@ const extractGithubInfo = async (item) => {
       repo.owner = owner;
       repo.licenseName = item['license'];
       repo.score = item['score'];
-      repo.numberOfBranch=number
+      repo.numberOfBranch=numberOfBranch;
       return repo;
 }
 //fetch for follower_url,following_url,name,nameBranch is not working due to api limitation 
