@@ -31,44 +31,46 @@ const extractGithubInfo = async (item) => {
       let repo = {
         ...resultTemplate
       };
-      let owner = {
-        login: item.owner.login
-    };
       try{
         let res = await fetch(item.owner.url);
-        repo.name = res.name;
+        let new_res=await res.json()
+        repo.owners.name = new_res.name;
       }catch{
-        repo.name = "";
+        repo.owners.name = "";
     }
     try{
         res = await fetch(item.owner.followers_url);
-        repo.followersCount = res.length;
+        let new_res=await res.json()
+        repo.owners.followersCount = new_res.length;
+
       }
     catch{
-        repo.followersCount = 0;
+        repo.owners.followersCount = 0;
     }
     try{
         res = await fetch(item.owner.following_url.split("{")[0]);
-        repo.followingCount = res.length;
+        let new_res=await res.json()
+        repo.owners.followingCount = new_res.length;
     }
     catch{
-        repo.followingCount = 0;
+        repo.owners.followingCount = 0;
     }
     let numberOfBranch;
     try{
         res = await fetch(item.branches_url.split("{")[0]);
-        numberOfBranch = res.length;
+        let new_res=await res.json()
+        numberOfBranch = new_res.length;
       }
     catch{
         numberOfBranch = 0;
     }
       repo.name = item.name;
+      repo.owners.login = item['owner']['login'];
       repo.full_name = item['full_name'];
       repo.private = item['private'];
-      repo.owner = owner;
       repo.licenseName = item['license'];
       repo.score = item['score'];
-      repo.numberOfBranch=numberOfBranch;
+      repo.numberOfBranch=numberOfBranch
       return repo;
 }
-//fetch for follower_url,following_url,name,nameBranch is not working due to api limitation 
+
