@@ -34,8 +34,9 @@ const extractGithubInfo = async (item) => {
       repo.name = item.name;
       repo.full_name = item['full_name'];
       repo.private = item['private'];
-      repo.owners.login = item['owner']['login'];
+      repo.owner = item['owner'];
       repo.licenseName = item['license'];
       repo.score = item['score'];
+      repo.numberOfBranch=item['numberOfBranch']
       return repo;
 }
