@@ -31,12 +31,45 @@ const extractGithubInfo = async (item) => {
       let repo = {
         ...resultTemplate
       };
+      let owner = {
+        login: item.owner.login
+    };
+      try{
+        let res = await fetch(item.owner.url);
+        repo.name = res.name;
+      }catch{
+        repo.name = "";
+    }
+    try{
+        res = await fetch(item.owner.followers_url);
+        repo.followersCount = res.length;
+      }
+    catch{
+        repo.followersCount = 0;
+    }
+    try{
+        res = await fetch(item.owner.following_url.split("{")[0]);
+        repo.followingCount = res.length;
+    }
+    catch{
+        repo.followingCount = 0;
+        continue;
+    }
+    let numberOfBranch;
+    try{
+        res = await fetch(item.branches_url.split("{")[0]);
+        numberOfBranch = res.length;
+      }
+    catch{
+        numberOfBranch = 0;
+    }
       repo.name = item.name;
       repo.full_name = item['full_name'];
       repo.private = item['private'];
-      repo.owner = item['owner'];
+      repo.owner = owner;
       repo.licenseName = item['license'];
       repo.score = item['score'];
-      repo.numberOfBranch=item['numberOfBranch']
+      repo.numberOfBranch=number
       return repo;
 }
+//fetch for follower_url,following_url,name,nameBranch is not working due to api limitation 
